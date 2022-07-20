@@ -21,7 +21,7 @@ function App() {
   /* 여러 줄 주석도 가능 */
   return (
     <Wrapper>
-      <Hello name="charming-l" color="skyblue" /> { /* props를 지정한 Hello 컴포넌트, 넘긴 props 값 사용*/ }
+      <Hello name="charming-l" color="skyblue" isSmart={true}/> { /* props를 지정한 Hello 컴포넌트, 넘긴 props 값 사용*/ }
       <Hello></Hello>  { /* props가 없는 Hello 컴포넌트, defaultValue 사용*/ }
       <div>{inEnglish}</div>      
       <div style={JSStyle}>JS</div>
