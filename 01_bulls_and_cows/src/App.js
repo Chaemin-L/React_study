@@ -26,6 +26,7 @@ function App() {
   const [answer, setAnswer] = useState(createRandom());
   const [guessList, setList] = useState([]);
   const [input, setInput] = useState();
+  const [caution, setCaution] = useState(0);
   const [isOver, setIsOver] = useState({ status: 0, msg: "Game Over!!" });
   
   let nextId = useRef(0);
@@ -35,6 +36,12 @@ function App() {
   };
 
   const onGuess = () => {
+    if (isNaN(input) || Number(input)<0 || Number(input)>999) {
+      setCaution(1);
+      return;
+    }
+
+    setCaution(0);
     console.log(answer);
     let strike = 0; let ball = 0;
     // Strike, Ball, Out Algorithm
@@ -76,7 +83,8 @@ function App() {
   return (
     <div>
       <Header />
-      {!(isOver.status===1) && <><InputForm onChange={onChange} onGuess={onGuess} /><RecordList guessList={guessList} /></>}
+      {!(isOver.status === 1) && <><InputForm onChange={onChange} onGuess={onGuess} /><RecordList guessList={guessList} /></>}
+      { caution===1 && <div> 세 개의 서로 다른 숫자를 올바르게 입력해주세요!</div>}
       {isOver.status===1 && <Ending msg={isOver.msg} onRestart={onRestart} />}
     </div>
   );
