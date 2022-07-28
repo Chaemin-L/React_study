@@ -14,7 +14,7 @@ function Record({ guess }) {
 export default function RecordList({guessList}) {
     return (
         <div>
-            {guessList.map(guess => <Record guess={guess} />)}
+            {guessList.map(guess => <Record key={guess.id} guess={guess} />)}
         </div>
     )
 }

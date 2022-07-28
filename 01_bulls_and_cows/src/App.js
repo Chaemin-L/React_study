@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import Header from './Header';
 import InputForm from './InputForm';
 import Ending from './Ending';
@@ -26,7 +26,10 @@ function App() {
   const [answer, setAnswer] = useState(createRandom());
   const [guessList, setList] = useState([]);
   const [input, setInput] = useState();
-  const [isOver, setIsOver] = useState({status: 0, msg: "Game Over!!"});
+  const [isOver, setIsOver] = useState({ status: 0, msg: "Game Over!!" });
+  
+  let nextId = useRef(0);
+
   const onChange = e => {
     setInput(e.target.value);
   };
@@ -44,6 +47,7 @@ function App() {
       }
     }
     const guess = {
+      'id': nextId.current++, 
       'input': input,
       'strike': strike,
       'ball': ball,
