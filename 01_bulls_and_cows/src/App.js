@@ -3,22 +3,54 @@ import Header from './Header';
 import InputForm from './InputForm';
 import GameOver from './GameOver';
 
+// 숫자 개수
+const OPTION = 3;
+
+// 서로 다른 세 개의 숫자 배열 return
+const createRandom = () => {
+  const numList = [];
+  while (true) {
+    if (numList.length === OPTION) {
+      break;
+    }
+    const num = String(Math.floor(Math.random() * 9));
+    if (numList.indexOf(num) === -1) {
+      numList.push(num);
+    }
+  }
+  return numList;
+}
+
 function App() {
-  const [answer, setAnswer] = useState(String(Math.floor(Math.random() * 999)).padStart(3, '0'));
+  const [answer, setAnswer] = useState(createRandom());
   const [guess_list, setList] = useState([]);
   const [input, setInput] = useState();
   const [isGameOver, setGameOver] = useState(0);
   const onChange = e => {
     setInput(e.target.value);
-    console.log(input, answer);
   };
 
   const onGuess = () => {
+    let strike = 0; let ball = 0;
     // Strike, Ball, Out Algorithm
-    guess_list.push(input);
+    for (let i = 0; i < OPTION; i++) {
+      for (let a = 0; a < OPTION; a++) {
+        if (answer[a] === input[i]) {
+          if (a === i) strike++;
+          else ball++;
+        }
+      }
+    }
+    const guess = {
+      'input': input,
+      'strike': strike,
+      'ball': ball,
+      'out': 3 - strike - ball,
+    };
+
+    guess_list.push(guess);
     console.log(guess_list);
     if (guess_list.length === 10) {
-      console.log("Game over!");
       setGameOver(1);
     }
   };
@@ -26,14 +58,10 @@ function App() {
   const onRestart = () => {
     // 모든 변수 초기화
     setInput();
-    setAnswer(String(Math.floor(Math.random() * 999)).padStart(3, '0'));
+    setAnswer(createRandom());
     setList([]);
     setGameOver(0);
   };
-
-
-
-
 
   return (
     <div>
