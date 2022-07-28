@@ -5,9 +5,9 @@ function Record({ guess }) {
     return(
         <div>
             {guess.input},
-            {guess.strike && <span>{guess.strike} 스트라이크 </span>}
-            {guess.ball && <span>{guess.ball}볼 </span>}
-            {guess.out && <span>{guess.out}아웃 </span>}
+            {guess.strike!==0 && <span>{guess.strike} 스트라이크 </span>}
+            {guess.ball!==0 && <span>{guess.ball}볼 </span>}
+            {guess.out!==0 && <span>{guess.out}아웃 </span>}
         </div>
     )
 }

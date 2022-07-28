@@ -67,8 +67,8 @@ function App() {
   return (
     <div>
       <Header />
-      {!isGameOver && <InputForm onChange={onChange} onGuess={onGuess} />}
-      {isGameOver && <GameOver onRestart={onRestart} />}
+      {!(isGameOver===1) && <InputForm onChange={onChange} onGuess={onGuess} />}
+      {isGameOver===1 && <GameOver onRestart={onRestart} />}
       <RecordList guessList={guessList} />
     </div>
   );
