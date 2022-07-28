@@ -1,0 +1,21 @@
+import React from 'react';
+
+function Record({ guess }) {
+    console.log(typeof guess.strike)
+    return(
+        <div>
+            {guess.input},
+            {guess.strike && <span>{guess.strike} 스트라이크 </span>}
+            {guess.ball && <span>{guess.ball}볼 </span>}
+            {guess.out && <span>{guess.out}아웃 </span>}
+        </div>
+    )
+}
+
+export default function RecordList({guessList}) {
+    return (
+        <div>
+            {guessList.map(guess => <Record guess={guess} />)}
+        </div>
+    )
+}

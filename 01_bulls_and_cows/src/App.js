@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Header from './Header';
 import InputForm from './InputForm';
 import GameOver from './GameOver';
+import RecordList from './RecordList';
 
 // 숫자 개수
 const OPTION = 3;
@@ -23,7 +24,7 @@ const createRandom = () => {
 
 function App() {
   const [answer, setAnswer] = useState(createRandom());
-  const [guess_list, setList] = useState([]);
+  const [guessList, setList] = useState([]);
   const [input, setInput] = useState();
   const [isGameOver, setGameOver] = useState(0);
   const onChange = e => {
@@ -48,9 +49,9 @@ function App() {
       'out': 3 - strike - ball,
     };
 
-    guess_list.push(guess);
-    console.log(guess_list);
-    if (guess_list.length === 10) {
+    setList([...guessList, {...guess}])
+    console.log(guessList);
+    if (guessList.length === 10) {
       setGameOver(1);
     }
   };
@@ -68,6 +69,7 @@ function App() {
       <Header />
       {!isGameOver && <InputForm onChange={onChange} onGuess={onGuess} />}
       {isGameOver && <GameOver onRestart={onRestart} />}
+      <RecordList guessList={guessList} />
     </div>
   );
 }
