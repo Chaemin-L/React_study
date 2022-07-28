@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function GameOver({ onRestart }){
+export default function Ending({ msg, onRestart }){
     return (
         <div>
-            <h2>Game Over!!</h2>
+            <h2>{msg}</h2>
             <button onClick={onRestart}>다시하기↩</button>
         </div>
     )

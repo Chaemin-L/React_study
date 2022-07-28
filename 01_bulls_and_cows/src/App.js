@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import Header from './Header';
 import InputForm from './InputForm';
-import GameOver from './GameOver';
+import Ending from './Ending';
 import RecordList from './RecordList';
 
 // 숫자 개수
@@ -26,12 +26,13 @@ function App() {
   const [answer, setAnswer] = useState(createRandom());
   const [guessList, setList] = useState([]);
   const [input, setInput] = useState();
-  const [isGameOver, setGameOver] = useState(0);
+  const [isOver, setIsOver] = useState({status: 0, msg: "Game Over!!"});
   const onChange = e => {
     setInput(e.target.value);
   };
 
   const onGuess = () => {
+    console.log(answer);
     let strike = 0; let ball = 0;
     // Strike, Ball, Out Algorithm
     for (let i = 0; i < OPTION; i++) {
@@ -51,8 +52,12 @@ function App() {
 
     setList([...guessList, {...guess}])
     console.log(guessList);
-    if (guessList.length === 10) {
-      setGameOver(1);
+    if (strike === 3) {
+      setIsOver({...isOver, status: 1, msg: 'Win!!'})
+      console.log("win")
+    }
+    else if (guessList.length === 10) {
+      setIsOver({...isOver, status: 1});
     }
   };
 
@@ -61,15 +66,14 @@ function App() {
     setInput();
     setAnswer(createRandom());
     setList([]);
-    setGameOver(0);
+    setIsOver({...isOver, status: 0});
   };
 
   return (
     <div>
       <Header />
-      {!(isGameOver===1) && <InputForm onChange={onChange} onGuess={onGuess} />}
-      {isGameOver===1 && <GameOver onRestart={onRestart} />}
-      <RecordList guessList={guessList} />
+      {!(isOver.status===1) && <><InputForm onChange={onChange} onGuess={onGuess} /><RecordList guessList={guessList} /></>}
+      {isOver.status===1 && <Ending msg={isOver.msg} onRestart={onRestart} />}
     </div>
   );
 }
