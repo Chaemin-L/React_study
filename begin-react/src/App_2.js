@@ -17,11 +17,11 @@ function App() {
 
     const onChange = useCallback(e => {
         const { name, value } = e.target;
-        setInputs({
+        setInputs(inputs=>({
             ...inputs,
             [name]: value
-        });
-    }, [inputs]);
+        }));
+    }, []);
 
     const [users, setUsers] = useState([
         {
@@ -57,26 +57,25 @@ function App() {
             ...inputs,
             id: nextId.current,
         }
-        setUsers([...users, item]);
+        setUsers(prev=> [...prev, item]);
         nextId.current += 1;
         console.log(nextId.current)
-    }, [inputs, users, nextId]);
+    }, [inputs]);
 
     const onRemove = useCallback(targetId => {
-        const updateUsers = users.filter((user) => user.id !== targetId);
-        console.log(updateUsers);
-        setUsers(updateUsers);
-    }, [users]);
+        setUsers(user=>users.filter((user) => user.id !== targetId));
+    }, []);
 
     const onToggle = useCallback(id => {
-        setUsers(
+        setUsers(users=>
             users.map(
                 user => (user.id === id) ? { ...user, active: !user.active } : user
             )
         );
-    }, [users]);
+    }, []);
 
     const count = useMemo(() => countActiveUsers(users), [users]);
+
     return (
         <div>
             <CreateUser username={username} email={email} onChange={onChange} onCreate={onCreate} />

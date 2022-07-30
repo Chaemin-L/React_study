@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-function User({ user, onRemove, onToggle }) {
+const User = React.memo(function User({ user, onRemove, onToggle }) {
   /* useEffect 
   useEffect(() => {
     console.log('컴포넌트가 화면에 나타남');
@@ -32,10 +32,10 @@ function User({ user, onRemove, onToggle }) {
       <button onClick={() => onRemove(user.id)}>삭제</button>
     </div>
   );
-}
+})
 
 function UserList({ users, onRemove, onToggle }) {
-
+  console.log("userlist rerendering");
   return (
     <div>
       {users.map((user, index) => <User key={index} user={user} onRemove={onRemove} onToggle={onToggle} />)}
@@ -43,4 +43,4 @@ function UserList({ users, onRemove, onToggle }) {
   );
 }
 
-export default UserList;
+export default React.memo(UserList);

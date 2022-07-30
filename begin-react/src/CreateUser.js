@@ -1,6 +1,8 @@
 import React from 'react';
 
-function CreateUser({username, email,  onChange, onCreate}) {
+function CreateUser({ username, email, onChange, onCreate }) {
+  console.log("createUser rerendering");
+    
     return (
         <div>
             <input placeholder="계정명" onChange={onChange} name="username" value={username} />
@@ -10,4 +12,4 @@ function CreateUser({username, email,  onChange, onCreate}) {
     )
 }
 
-export default CreateUser;
+export default React.memo(CreateUser);
