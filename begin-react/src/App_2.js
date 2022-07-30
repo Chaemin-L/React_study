@@ -45,7 +45,7 @@ function reducer(state, action){
         case 'CREATE_USER':
             return { inputs: initialState.inputs, users: [...state.users, action.user] };
         case 'REMOVE_USER':
-            return { ...state, users: [...action.users] };
+            return { ...state, users: state.users.filter(user => user.id !== action.userid)};
         case 'TOGGLE_USER':
             return { ...state, users: state.users.map(user => user.id === action.userid? {...user, active: !user.active}: user) };
         default:
@@ -84,7 +84,7 @@ function App() {
     const onRemove = useCallback(userid => {
         dispatch({
             type: 'REMOVE_USER',
-            users: users.filter(user => user.id !== userid)
+            userid,
         });
     }, []);
 
