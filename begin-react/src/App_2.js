@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useCallback } from 'react';
 //import Counter from './Counter'
 //import InputSample from './InputSample'
 import UserList from './UserList'
@@ -15,13 +15,13 @@ function App() {
     const { username, email } = inputs;
     //const [count, setCount] = useState(0);
 
-    const onChange = (e) => {
+    const onChange = useCallback(e => {
         const { name, value } = e.target;
         setInputs({
             ...inputs,
             [name]: value
         });
-    }
+    }, [inputs]);
 
     const [users, setUsers] = useState([
         {
@@ -51,30 +51,30 @@ function App() {
     */
     const nextId = useRef(4);
     //const nextId = { current: 4 };
-    const onCreate = () => {
+    const onCreate = useCallback(() => {
         // 배열에 새로운 요소 추가 로직
         const item = {
             ...inputs,
             id: nextId.current,
         }
-        setUsers([ ...users, item ]);
+        setUsers([...users, item]);
         nextId.current += 1;
         console.log(nextId.current)
-    }
+    }, [inputs, users, nextId]);
 
-    const onRemove = targetId => {
+    const onRemove = useCallback(targetId => {
         const updateUsers = users.filter((user) => user.id !== targetId);
         console.log(updateUsers);
         setUsers(updateUsers);
-    };
+    }, [users]);
 
-    const onToggle = id => {
+    const onToggle = useCallback(id => {
         setUsers(
             users.map(
                 user => (user.id === id) ? { ...user, active: !user.active } : user
             )
         );
-    }
+    }, [users]);
 
     const count = useMemo(() => countActiveUsers(users), [users]);
     return (
