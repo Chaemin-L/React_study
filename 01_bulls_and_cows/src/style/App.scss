@@ -1,0 +1,18 @@
+body{
+    background-color: orange;
+}
+
+.App{
+    width: 50vw;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 249, 238);
+    border: 2px solid rgb(255, 209, 124) {
+        radius: 20px;
+    }
+    margin: auto{
+        top: 5%;
+    }
+    padding: 3%;
+}

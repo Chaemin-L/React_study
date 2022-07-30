@@ -3,6 +3,7 @@ import Header from './Header';
 import InputForm from './InputForm';
 import Ending from './Ending';
 import RecordList from './RecordList';
+import './style/App.scss';
 
 // 숫자 개수
 const OPTION = 3;
@@ -81,7 +82,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="App">
       <Header />
       {!(isOver.status === 1) && <><InputForm onChange={onChange} onGuess={onGuess} /><RecordList guessList={guessList} /></>}
       { caution===1 && <div> 세 개의 서로 다른 숫자를 올바르게 입력해주세요!</div>}
