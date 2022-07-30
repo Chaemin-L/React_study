@@ -1,8 +1,9 @@
 import React, { useRef, useMemo, useCallback, useReducer } from 'react';
 //import Counter from './Counter'
 //import InputSample from './InputSample'
-import UserList from './UserList'
-import CreateUser from './CreateUser'
+import UserList from './UserList';
+import CreateUser from './CreateUser';
+import useInputs from './hooks/useInputs';
 
 
 function countActiveUsers(user) {
@@ -11,10 +12,6 @@ function countActiveUsers(user) {
 };
 
 const initialState = {
-    inputs: {
-        username: '',
-        email: '',
-    },
     users: [
         {
             id: 1,
@@ -40,8 +37,6 @@ const initialState = {
 
 function reducer(state, action){
     switch (action.type) {
-        case 'CHANGE_INPUT':
-            return { ...state, inputs: {...state.inputs, [action.name]: action.value } };
         case 'CREATE_USER':
             return { inputs: initialState.inputs, users: [...state.users, action.user] };
         case 'REMOVE_USER':
@@ -54,20 +49,11 @@ function reducer(state, action){
 }
     
 function App() {    
+    const [{username, email}, onChange, reset] = useInputs()
    
-
     const [state, dispatch] = useReducer(reducer, initialState);
-    const { inputs: { username, email }, users } = state;
+    const { users } = state;
     const nextId = useRef(4);
-
-    const onChange = useCallback((e) => {
-        const { name, value } = e.target;
-        dispatch({
-            type: 'CHANGE_INPUT',
-            name,
-            value,
-        });
-    }, []);
 
     const onCreate = useCallback(e => {
         dispatch({
@@ -78,7 +64,8 @@ function App() {
                 email,
             }
         });
-        nextId.current+=1;
+        nextId.current += 1;
+        reset();
     }, [username, email]);
 
     const onRemove = useCallback(userid => {
