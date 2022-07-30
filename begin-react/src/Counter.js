@@ -1,10 +1,20 @@
-import React, {useState} from 'react';
+import React, {useReducer} from 'react';
 
 function Counter() {
-    const [counter, setCounter] = useState(0);
+    const reducer = (state, action) => {
+        switch (action.type) {
+            case 'INCREASE':
+                return state + 1;
+            case 'DECREASE':
+                return state - 1;
+            default:
+                return state;
+        }
+    }
+    const [counter, dispatch] = useReducer(reducer, 0);
 
-    const onIncrease = () => setCounter(counter + 1);
-    const onDecrease = () => setCounter(counter - 1);
+    const onIncrease = () => { dispatch({ type: 'INCREASE' }); }
+    const onDecrease = () => { dispatch({ type: 'DECREASE'}); }
 
     return (
         <div>

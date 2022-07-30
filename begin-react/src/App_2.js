@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useCallback } from 'react';
+import React, { useRef, useMemo, useCallback, useReducer } from 'react';
 //import Counter from './Counter'
 //import InputSample from './InputSample'
 import UserList from './UserList'
@@ -10,78 +10,98 @@ function countActiveUsers(user) {
     return user.filter(user => user.active).length;
 };
 
-function App() {    
-    const [inputs, setInputs] = useState({ username: '', email: '' });
-    const { username, email } = inputs;
-    //const [count, setCount] = useState(0);
-
-    const onChange = useCallback(e => {
-        const { name, value } = e.target;
-        setInputs(inputs=>({
-            ...inputs,
-            [name]: value
-        }));
-    }, []);
-
-    const [users, setUsers] = useState([
+const initialState = {
+    inputs: {
+        username: '',
+        email: '',
+    },
+    users: [
         {
-          id: 1,
-          username: 'velopert',
+            id: 1,
+            username: 'velopert',
             email: 'public.velopert@gmail.com',
-          active: true,
-          
+            active: true,
+      
         },
         {
-          id: 2,
-          username: 'tester',
-          email: 'tester@example.com',
-          active: false,
+            id: 2,
+            username: 'tester',
+            email: 'tester@example.com',
+            active: false,
         },
         {
-          id: 3,
-          username: 'liz',
-          email: 'liz@example.com',
-          active: false,
+            id: 3,
+            username: 'liz',
+            email: 'liz@example.com',
+            active: false,
         }
-    ]);
-    /*
-    useEffect(() => {
-        setCount(countActiveUsers(users));
-    }, [users])
-    */
-    const nextId = useRef(4);
-    //const nextId = { current: 4 };
-    const onCreate = useCallback(() => {
-        // 배열에 새로운 요소 추가 로직
-        const item = {
-            ...inputs,
-            id: nextId.current,
-        }
-        setUsers(prev=> [...prev, item]);
-        nextId.current += 1;
-        console.log(nextId.current)
-    }, [inputs]);
+    ]
+};
 
-    const onRemove = useCallback(targetId => {
-        setUsers(user=>users.filter((user) => user.id !== targetId));
+function reducer(state, action){
+    switch (action.type) {
+        case 'CHANGE_INPUT':
+            return { ...state, inputs: {...state.inputs, [action.name]: action.value } };
+        case 'CREATE_USER':
+            return { inputs: initialState.inputs, users: [...state.users, action.user] };
+        case 'REMOVE_USER':
+            return { ...state, users: [...action.users] };
+        case 'TOGGLE_USER':
+            return { ...state, users: state.users.map(user => user.id === action.userid? {...user, active: !user.active}: user) };
+        default:
+            return state;
+    }
+}
+    
+function App() {    
+   
+
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const { inputs: { username, email }, users } = state;
+    const nextId = useRef(4);
+
+    const onChange = useCallback((e) => {
+        const { name, value } = e.target;
+        dispatch({
+            type: 'CHANGE_INPUT',
+            name,
+            value,
+        });
     }, []);
 
-    const onToggle = useCallback(id => {
-        setUsers(users=>
-            users.map(
-                user => (user.id === id) ? { ...user, active: !user.active } : user
-            )
-        );
+    const onCreate = useCallback(e => {
+        dispatch({
+            type: 'CREATE_USER',
+            user: {
+                id: nextId.current,
+                username,
+                email,
+            }
+        });
+        nextId.current+=1;
+    }, [username, email]);
+
+    const onRemove = useCallback(userid => {
+        dispatch({
+            type: 'REMOVE_USER',
+            users: users.filter(user => user.id !== userid)
+        });
+    }, []);
+
+    const onToggle = useCallback(userid => {
+        dispatch({
+            type: 'TOGGLE_USER',
+            userid,
+        });
     }, []);
 
     const count = useMemo(() => countActiveUsers(users), [users]);
-
     return (
-        <div>
+        <>
             <CreateUser username={username} email={email} onChange={onChange} onCreate={onCreate} />
-            <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
-            <div>활성 사용자 수: { count }</div>
-        </div>
+            <UserList users={users} onToggle={onToggle} onRemove={onRemove} />
+            <div>활성 사용자 수: {count}</div>
+        </>
     );
 }
 
