@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 //import App from './App';  // 1.1~1.6
 import App from './App_2';  // 1.7~
+//import Counter from './Counter_2';  // 1.24
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
