@@ -1,10 +1,11 @@
 import React from 'react';
+import Button from './component/Button';
 
 export default function Ending({ msg, onRestart }){
     return (
         <div>
             <h2>{msg}</h2>
-            <button onClick={onRestart}>다시하기↩</button>
+            <Button onClick={onRestart}>다시하기↩</Button>
         </div>
     )
 }
