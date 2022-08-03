@@ -78,7 +78,7 @@ function App() {
     setInput();
     setAnswer(createRandom());
     setList([]);
-    setIsOver({...isOver, status: 0});
+    setIsOver({status: 0, msg: "Game Over"});
   };
 
   return (
