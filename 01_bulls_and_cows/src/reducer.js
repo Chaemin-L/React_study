@@ -7,7 +7,7 @@ export default function reducer(state, action) {
         case 'GUESS':
             const { input, answer } = state;
             const { id, option } = action;
-            if (isNaN(input) || Number(input) < 0 || input.length < 3) {
+            if ( !input || isNaN(input) || Number(input) < 0 || input.length < 3) {
                 return { ...state, caution: true };
             }
             // no caution
