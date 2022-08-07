@@ -34,6 +34,7 @@ const initialValue = {
 
 
 function App() {
+  console.log('App Component rendering');
   let nextId = useRef(0);
   const [state, dispatch] = useReducer(reducer, initialValue);
 

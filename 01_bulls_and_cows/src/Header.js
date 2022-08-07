@@ -1,6 +1,7 @@
 import React from 'react';
 
-export default function Header(){
+function Header() {
+    console.log('Header Component rendering');
     return (
         <div>
             <h2>숫자야구</h2>
@@ -8,3 +9,5 @@ export default function Header(){
         </div>
     );
 }
+
+export default React.memo(Header);
