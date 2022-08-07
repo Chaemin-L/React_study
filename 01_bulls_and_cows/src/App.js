@@ -1,9 +1,10 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useReducer, useEffect, useCallback} from 'react';
 import Header from './Header';
 import InputForm from './InputForm';
 import Ending from './Ending';
 import RecordList from './RecordList';
 import './style/App.scss';
+import reducer from './reducer';
 
 // 숫자 개수
 const OPTION = 3;
@@ -23,70 +24,37 @@ const createRandom = () => {
   return numList;
 }
 
+const initialValue = {
+  answer: createRandom(),
+  guessList: [],
+  input: null,
+  caution: false,
+  isOver: { status: false, msg: "Game Over!!" },
+}
+
+
 function App() {
-  const [answer, setAnswer] = useState(createRandom());
-  const [guessList, setList] = useState([]);
-  const [input, setInput] = useState();
-  const [caution, setCaution] = useState(0);
-  const [isOver, setIsOver] = useState({ status: 0, msg: "Game Over!!" });
-  
   let nextId = useRef(0);
+  const [state, dispatch] = useReducer(reducer, initialValue);
 
-  const onChange = e => {
-    setInput(e.target.value);
-  };
+  const { isOver: {status, msg}, caution, guessList } = state;
 
-  const onGuess = () => {
-    if (isNaN(input) || Number(input)<0 || Number(input)>999) {
-      setCaution(1);
-      return;
-    }
+  const onChange = useCallback((e) => {
+    dispatch({ type: 'CHANGE', value: e.target.value });
+  })
 
-    setCaution(0);
-    console.log(answer);
-    let strike = 0; let ball = 0;
-    // Strike, Ball, Out Algorithm
-    for (let i = 0; i < OPTION; i++) {
-      for (let a = 0; a < OPTION; a++) {
-        if (answer[a] === input[i]) {
-          if (a === i) strike++;
-          else ball++;
-        }
-      }
-    }
-    const guess = {
-      'id': nextId.current++, 
-      'input': input,
-      'strike': strike,
-      'ball': ball,
-      'out': 3 - strike - ball,
-    };
+  const onGuess = useCallback(() => {
+    dispatch({ type: 'GUESS', option: OPTION, id: nextId.current++ });
+  })
 
-    setList([...guessList, {...guess}])
-    console.log(guessList);
-    if (strike === 3) {
-      setIsOver({...isOver, status: 1, msg: 'Win!!'})
-      console.log("win")
-    }
-    else if (guessList.length === 10) {
-      setIsOver({...isOver, status: 1});
-    }
-  };
-
-  const onRestart = () => {
-    // 모든 변수 초기화
-    setInput();
-    setAnswer(createRandom());
-    setList([]);
-    setIsOver({status: 0, msg: "Game Over"});
-  };
+  const onRestart = useCallback(() => dispatch({ type: 'RESTART', initialValue: initialValue }));
 
   return (
     <div className="App">
       <Header />
-      {!(isOver.status === 1) && <><InputForm onChange={onChange} onGuess={onGuess} /><RecordList guessList={guessList} /></>}
-      { caution===1 && <div> 세 개의 서로 다른 숫자를 올바르게 입력해주세요!</div>}
-      {isOver.status===1 && <Ending msg={isOver.msg} onRestart={onRestart} />}
+      {!status && <><InputForm onChange={onChange} onGuess={onGuess} /><RecordList guessList={guessList} /></>}
+      { caution && <div> 세 개의 서로 다른 숫자를 올바르게 입력해주세요!</div>}
+      {status && <Ending msg={msg} onRestart={onRestart} />}
     </div>
   );
 }
