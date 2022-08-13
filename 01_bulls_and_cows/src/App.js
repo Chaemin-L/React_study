@@ -1,4 +1,4 @@
-import React, {useState, useRef, useReducer, useEffect, useCallback} from 'react';
+import React, { useRef, useReducer, useCallback} from 'react';
 import Header from './Header';
 import InputForm from './InputForm';
 import Ending from './Ending';
@@ -42,13 +42,13 @@ function App() {
 
   const onChange = useCallback((e) => {
     dispatch({ type: 'CHANGE', value: e.target.value });
-  })
+  }, [])
 
   const onGuess = useCallback(() => {
     dispatch({ type: 'GUESS', option: OPTION, id: nextId.current++ });
-  })
+  }, [])
 
-  const onRestart = useCallback(() => dispatch({ type: 'RESTART', initialValue: initialValue }));
+  const onRestart = useCallback(() => dispatch({ type: 'RESTART', initialValue: initialValue }), []);
 
   return (
     <div className="App">
