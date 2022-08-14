@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link, Routes, Route } from 'react-router-dom';
-import Profile from './Profile';
+import { Link, Outlet } from 'react-router-dom';
+
 
 const Profiles = () => {
   return (
@@ -13,11 +13,8 @@ const Profiles = () => {
         <li>
           <Link to="/profiles/gildong">gildong</Link>
         </li>
-      </ul>
-        <Routes>
-            <Route path="/" element={<div>유저를 선택해주세요.</div>} />
-            <Route path=":username" element={<Profile />} />
-        </Routes>
+          </ul>
+          <Outlet />
     </div>
   );
 };
