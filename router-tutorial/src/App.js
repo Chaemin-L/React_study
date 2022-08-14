@@ -4,6 +4,7 @@ import About from './About';
 import Profiles from './Profiles';
 import Profile from "./Profile";
 import HistorySample from './HistorySample';
+import WithRouterSample from './WithRouterSample';
 
 function App() {
   const location = useLocation();
@@ -24,6 +25,7 @@ function App() {
           <Route path='' element={<div>유저를 선택해주세요.</div>}/>
           <Route path=":username" element={<Profile />} />
         </Route>
+        <Route path="/history" element={<HistorySample />} />
         <Route path="/*" element={
           <div>
             <h2>이 페이지는 존재하지 않습니다:</h2>
@@ -31,6 +33,7 @@ function App() {
           </div>
         } />
       </Routes>
+      <WithRouterSample />
     </div>
   );
 };
