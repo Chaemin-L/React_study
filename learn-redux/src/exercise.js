@@ -52,6 +52,7 @@ const listener = () => {
     console.log(state);
 }
 
+// eslint-disable-next-line
 const unsubscribe =  store.subscribe(listener);
 
 store.dispatch(increase());
